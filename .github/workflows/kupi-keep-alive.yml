@@ -1,1 +1,47 @@
 
+name: KUPI Render Keep Alive
+
+on:
+  schedule:
+    # Every 10 minutes, every day (UTC)
+    - cron: '3,13,23,33,43,53 * * * *'
+
+  # Allow manual testing from GitHub Actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kupi-render-keep-alive
+  cancel-in-progress: false
+
+jobs:
+  keep-alive:
+    name: Ping KUPI Website
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Render KUPI Application
+        shell: bash
+        run: |
+          echo "Pinging KUPI Render service..."
+          echo "UTC Time: $(date -u)"
+          echo "URL: https://kupi-xy0u.onrender.com/"
+
+          curl \
+            --fail \
+            --location \
+            --silent \
+            --show-error \
+            --connect-timeout 20 \
+            --max-time 120 \
+            --retry 2 \
+            --retry-delay 10 \
+            --retry-all-errors \
+            --output /dev/null \
+            --write-out "HTTP Status: %{http_code}\nTotal Time: %{time_total}s\n" \
+            "https://kupi-xy0u.onrender.com/"
+
+          echo "KUPI ping completed."
