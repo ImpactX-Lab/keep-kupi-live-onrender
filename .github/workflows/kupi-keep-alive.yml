@@ -4,7 +4,7 @@ name: KUPI Render Keep Alive
 on:
   schedule:
     # Every 10 minutes, every day (UTC)
-    - cron: '3,13,23,33,43,53 * * * *'
+    - cron: '7,17,27,37,47,57 * * * *'
 
   # Allow manual testing from GitHub Actions
   workflow_dispatch:
